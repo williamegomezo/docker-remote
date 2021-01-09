@@ -1,0 +1,61 @@
+#!/usr/bin/env bash
+
+# bash completion for Docker Remote (docker-remote)
+
+if ! command -v docker-remote &> /dev/null; then
+  return
+fi
+
+__generate_completion() {
+  declare current_word
+  current_word="${COMP_WORDS[COMP_CWORD]}"
+  # shellcheck disable=SC2207
+  COMPREPLY=($(compgen -W "$1" -- "${current_word}"))
+  return 0
+}
+
+__docker_remote_options() {
+  OPTIONS=''
+  __generate_completion "${OPTIONS}"
+}
+
+__docker_remote_commands() {
+  declare current_word
+  declare command
+
+  current_word="${COMP_WORDS[COMP_CWORD]}"
+
+  COMMANDS='
+    help push run'
+
+  case "${current_word}" in
+    -*) __docker_remote_options ;;
+    *) __generate_completion "${COMMANDS}" ;;
+  esac
+}
+
+__docker_remote() {
+  declare previous_word
+  previous_word="${COMP_WORDS[COMP_CWORD - 1]}"
+
+  case "${previous_word}" in
+    *) __docker_remote_commands ;;
+  esac
+
+  return 0
+}
+
+# complete is a bash builtin, but recent versions of ZSH come with a function
+# called bashcompinit that will create a complete in ZSH. If the user is in
+# ZSH, load and run bashcompinit before calling the complete function.
+if [[ -n ${ZSH_VERSION-} ]]; then
+  # Calling compinit first and then bashcompinit as mentioned by zsh man page.
+  autoload -U +X compinit && if [[ ${ZSH_DISABLE_COMPFIX-} = true ]]; then
+    compinit -u
+  else
+    compinit
+  fi
+  autoload -U +X bashcompinit && bashcompinit
+fi
+
+complete -o default -F __docker_remote docker-remote
