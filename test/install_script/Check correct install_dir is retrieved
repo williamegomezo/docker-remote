@@ -1,0 +1,18 @@
+#!/bin/sh
+
+cleanup () {
+  unset -f die cleanup
+  unset install_dir
+}
+
+die () { echo "$@" ; cleanup ; exit 1; }
+
+DOCKER_REMOTE_ENV=testing \. ../../install.sh
+HOME="__home__"
+
+INSTALL_DIR=$(install_dir)
+FALLBACK_DIR=""
+[ ! -z "$XDG_CONFIG_HOME" ] && FALLBACK_DIR="$XDG_CONFIG_HOME/docker-remote" || FALLBACK_DIR="$HOME/.docker-remote"
+[ "_$INSTALL_DIR" = "_$FALLBACK_DIR" ] || die "install_dir should default to \$XDG_CONFIG_DIR/.docker-remote. Current output: $INSTALL_DIR"
+
+cleanup

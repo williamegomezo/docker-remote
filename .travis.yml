@@ -1,0 +1,27 @@
+language: generic
+dist: xenial
+addons:
+  apt:
+    packages:
+      - zsh
+
+before_install:
+  - $SHELL --version 2> /dev/null || dpkg -s $SHELL 2> /dev/null || which $SHELL
+  - curl --version
+  - wget --version
+  - if [ -n "$WITHOUT_CURL" ]; then sudo apt-get install curl -y ; fi
+
+install:
+  - '[ -z "$WITHOUT_CURL" ] || sudo apt-get remove curl -y'
+  - sudo wget https://raw.githubusercontent.com/tlevine/urchin/v0.1.0-rc3/urchin -P /usr/local/bin/ && sudo chmod +x /usr/local/bin/urchin
+
+script:
+  - if [ -n "${SHELL-}" ] && [ -n "${TEST_SUITE}" ]; then make TEST_SUITE=$TEST_SUITE test-$SHELL; fi;
+
+env:
+  global:
+    - DOCKER_REMOTE_DIR="${TRAVIS_BUILD_DIR}"
+
+  matrix:
+    - SHELL=bash TEST_SUITE=install_script
+   

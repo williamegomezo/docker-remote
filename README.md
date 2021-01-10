@@ -1,5 +1,6 @@
-# Docker Remote
-Docker remote is a cli to manage everything about docker in a remote machine.
+# Docker Remote [![Build Status](https://travis-ci.org/williamegomezo/docker-remote.svg?branch=master)][3] [![docker-remote version](https://img.shields.io/badge/version-v1.0.0-yellow.svg)][4] 
+
+Docker remote is a CLI to manage everything about docker in a remote machine.
 
 ## Installing and Updating
 All installation scripts are based on `nvm` installation scripts (https://github.com/nvm-sh/nvm).
@@ -61,3 +62,5 @@ docker-remote run SSH_CONNECTION [OPTIONS] IMAGE[:TAG|@DIGEST] [COMMAND] [ARG...
 ```
 
 [2]: https://github.com/williamegomezo/docker-remote/blob/v1.0.0/install.sh
+[3]: https://travis-ci.org/williamegomezo/docker-remote
+[4]: https://github.com/williamegomezo/docker-remote/releases/tag/v1.0.0
