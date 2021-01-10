@@ -233,6 +233,6 @@ reset_functions() {
   get_source install_dir latest_version
 }
 
-do_install
+[ "_$DOCKER_REMOTE_ENV" = "_testing" ] || do_install
 
 } # this ensures the entire script is downloaded #
